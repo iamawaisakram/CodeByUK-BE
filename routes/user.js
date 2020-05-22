@@ -172,7 +172,7 @@ router.get('/me', auth, async (req, res) => {
         if (error) {
           res.status(400).json({ error })
         }
-        res.send(result.rows[0])
+        res.send({ user: result.rows[0] })
       })
     })
   } catch (e) {
