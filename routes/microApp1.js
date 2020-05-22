@@ -33,7 +33,26 @@ router.get('/get-data-entries', auth, async (req, res) => {
       })
     })
   } catch (e) {
-    res.send({ message: 'Error in Fetching user' })
+    res.send({ message: 'Error in Fetching Logbook Entries' })
+  }
+})
+
+/* * *
+ * @method - GET
+ * @description - Get Min and Max Values
+ * @param - /data/get-test-results
+ */
+
+router.get('/get-test-results', auth, async (req, res) => {
+  try {
+    // * request.user is getting fetched from Middleware after token authentication
+    const minQuery = 'SELECT MIN(value) FROM data'
+    const maxQuery = 'SELECT MAX(value) FROM data'
+    const min = await pool.query(minQuery)
+    const max = await pool.query(maxQuery)
+    res.send({ result: { ...min.rows[0], ...max.rows[0] } })
+  } catch (e) {
+    res.send({ message: 'Error in Fetching Logbook Entries' })
   }
 })
 
@@ -95,7 +114,7 @@ router.get('/get-reminder-entries', auth, async (req, res) => {
       })
     })
   } catch (e) {
-    res.send({ message: 'Error in Fetching user' })
+    res.send({ message: 'Error in Fetching Reminders' })
   }
 })
 
