@@ -48,9 +48,14 @@ router.get('/get-test-results', auth, async (req, res) => {
     // * request.user is getting fetched from Middleware after token authentication
     const minQuery = 'SELECT MIN(value) FROM data'
     const maxQuery = 'SELECT MAX(value) FROM data'
+    const latestQuery =
+      'SELECT value as latest FROM data where id =(select MAX(id) from data)'
     const min = await pool.query(minQuery)
     const max = await pool.query(maxQuery)
-    res.send({ result: { ...min.rows[0], ...max.rows[0] } })
+    const latest = await pool.query(latestQuery)
+    res.send({
+      result: { ...min.rows[0], ...max.rows[0], ...latest.rows[0] }
+    })
   } catch (e) {
     res.send({ message: 'Error in Fetching Logbook Entries' })
   }
